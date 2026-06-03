@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "buildCommand": "",
+  "framework": "nodejs",
+  "functions": {
+    "api/**": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(?!api)(.*)",
+      "destination": "/"
+    }
+  ]
+}
+
+

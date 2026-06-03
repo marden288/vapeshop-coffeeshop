@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Cloud & Brew | Relax, Sip, and Vape in One Place</title>
+  <!-- Google Fonts + Tailwind + Font Awesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { transition: background-color 0.2s ease, color 0.2s; }
+    /* Custom colorful gradients and animations */
+    .hero-gradient {
+      background: linear-gradient(135deg, #2b1a0f 0%, #5e2e1c 50%, #d97706 100%);
+    }
+    .dark .hero-gradient {
+      background: linear-gradient(135deg, #1a120c 0%, #3d2a1a 50%, #b45309 100%);
+    }
+    .product-card {
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 35px -12px rgba(0,0,0,0.25);
+    }
+    .chat-bubble {
+      animation: fadeInUp 0.3s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Profile picture hover effect */
+    .profile-preview {
+      transition: all 0.2s;
+    }
+    .profile-preview:hover {
+      filter: brightness(0.95);
+      transform: scale(1.02);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f3e8d8; }
+    ::-webkit-scrollbar-thumb { background: #d97706; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-track { background: #2d2a24; }
+    .dark ::-webkit-scrollbar-thumb { background: #f59e0b; }
+    /* Colorful button styles */
+    .btn-coffee { background: #7b3f00; }
+    .btn-coffee:hover { background: #5a2e00; }
+    .btn-vape { background: #2c5f2d; }
+    .btn-vape:hover { background: #1e421f; }
+  </style>
+</head>
+<body class="bg-amber-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md shadow-lg border-b border-amber-200 dark:border-amber-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-mug-hot text-amber-700 dark:text-amber-400 text-2xl"></i>
+          <i class="fas fa-cloud text-amber-600 dark:text-amber-300 text-xl"></i>
+          <span class="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-amber-800 to-amber-500 bg-clip-text text-transparent">Cloud & Brew</span>
+        </div>
+        <div class="hidden md:flex space-x-7 font-semibold">
+          <a href="#" class="nav-link hover:text-amber-600 dark:hover:text-amber-400 transition" data-page="home">Home</a>
+          <a href="#" class="nav-link hover:text-amber-600" data-page="about">About</a>
+          <a href="#" class="nav-link hover:text-amber-600" data-page="products">Products</a>
+          <a href="#" class="nav-link hover:text-amber-600" data-page="business-plan">Business Plan</a>
+          <a href="#" class="nav-link hover:text-amber-600" data-page="gallery">Gallery</a>
+          <a href="#" class="nav-link hover:text-amber-600" data-page="contact">Contact</a>
+          <a href="#" class="nav-link hover:text-amber-600" data-page="admin">Admin</a>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- Profile Picture with change option -->
+          <div class="relative group">
+            <img id="profileAvatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="w-9 h-9 rounded-full border-2 border-amber-500 cursor-pointer object-cover shadow-md profile-preview">
+            <div class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-xl hidden group-hover:block p-2 z-50">
+              <label class="text-xs font-semibold block mb-1 text-center">Change Photo</label>
+              <input type="file" id="profileUpload" accept="image/*" class="text-xs w-full">
+            </div>
+          </div>
+          <button id="themeToggle" class="p-2 rounded-full bg-amber-100 dark:bg-gray-700 text-amber-700 dark:text-amber-300 transition"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></button>
+          <a href="#" data-page="cart" class="relative"><i class="fas fa-shopping-cart text-xl text-amber-700 dark:text-amber-300"></i><span id="cartCount" class="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold">0</span></a>
+          <a href="#" data-page="membership" class="hidden md:inline-block bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md hover:shadow-lg transition">✨ Join Rewards</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Dynamic Content -->
+  <main id="app" class="min-h-screen pb-12"></main>
+
+  <!-- Footer -->
+  <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8 mt-12 border-t-4 border-amber-500">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-6 text-center md:text-left">
+      <div><i class="fab fa-instagram mr-2 text-amber-400"></i> Marden.dev &nbsp; <i class="fab fa-twitter ml-2 text-amber-400"></i> Marden.dev</div>
+      <div>© 2026 Cloud & Brew — <span class="text-amber-300">Relax, Sip & Vape</span></div>
+      <div><i class="fas fa-envelope text-amber-400"></i> mardenbarangan0728@gmail.com &nbsp;| ☎ 09953069825</div>
+    </div>
+  </footer>
+
+  <!-- Product Data Store -->
+  <script>
+    // colorful products with images (vape + coffee)
+    let products = [
+      { id: "c1", name: "Caramel Macchiato", desc: "Smooth espresso with vanilla & caramel drizzle", price: 5.25, category: "coffee", img: "https://picsum.photos/id/225/300/200", type: "Hot Coffee" },
+      { id: "c2", name: "Iced Vanilla Latte", desc: "Chilled latte, creamy vanilla bean", price: 5.75, category: "coffee", img: "https://picsum.photos/id/146/300/200", type: "Iced Coffee" },
+      { id: "c3", name: "Double Espresso", desc: "Rich and bold double shot, aromatic", price: 3.5, category: "coffee", img: "https://picsum.photos/id/130/300/200", type: "Espresso Drinks" },
+      { id: "c4", name: "Matcha Green Tea", desc: "Premium ceremonial matcha latte", price: 4.95, category: "non-coffee", img: "https://picsum.photos/id/152/300/200", type: "Non-Coffee" },
+      { id: "p1", name: "Blueberry Muffin", desc: "Fresh baked, buttery muffin with streusel", price: 3.25, category: "pastry", img: "https://picsum.photos/id/264/300/200", type: "Pastries" },
+      { id: "v1", name: "Elf Bar BC5000", desc: "Disposable 5000 puffs, blue razz ice", price: 18.99, category: "vape", img: "https://picsum.photos/id/21/300/200", type: "Disposable" },
+      { id: "v2", name: "Vaporesso XROS 3", desc: "Pod system, adjustable airflow, sleek", price: 32.99, category: "vape", img: "https://picsum.photos/id/26/300/200", type: "Device" },
+      { id: "v3", name: "Naked 100 Menthol", desc: "60mL e-liquid, icy menthol blast", price: 19.99, category: "vape", img: "https://picsum.photos/id/48/300/200", type: "E-Liquid" },
+      { id: "v4", name: "Coils Pack (5pcs)", desc: "Mesh coils 0.6 ohm, long lasting", price: 14.5, category: "vape", img: "https://picsum.photos/id/74/300/200", type: "Accessory" },
+      { id: "v5", name: "Starter Kit: Caliburn G3", desc: "Complete kit + 2 pods, best for beginners", price: 39.99, category: "vape", img: "https://picsum.photos/id/77/300/200", type: "Starter Kit" }
+    ];
+    let cart = JSON.parse(localStorage.getItem('cloudbrew_cart')) || [];
+    let orders = JSON.parse(localStorage.getItem('cloudbrew_orders')) || [];
+    let users = JSON.parse(localStorage.getItem('cloudbrew_users')) || [{ id: "demo1", email: "member@cloud.com", points: 280, password: "pass123", name: "Coffee Lover" }];
+    let currentUser = JSON.parse(localStorage.getItem('cloudbrew_user')) || null;
+    let salesReports = { totalSales: 18450, ordersCount: 387 };
+
+    // Helper functions
+    function saveCart() { localStorage.setItem('cloudbrew_cart', JSON.stringify(cart)); updateCartBadge(); }
+    function updateCartBadge() { document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.qty,0); }
+    function addToCart(productId) { let p=products.find(p=>p.id===productId); if(p){ let existing=cart.find(i=>i.id===p.id); if(existing) existing.qty++; else cart.push({...p, qty:1}); saveCart(); showToast(`${p.name} added to cart!`, "#d97706"); } }
+    function showToast(msg, bg="#d97706") { let toast=document.createElement('div'); toast.className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-"+bg+" text-white px-5 py-2 rounded-full shadow-xl z-50 text-sm font-bold animate-bounce"; toast.innerText=msg; document.body.appendChild(toast); setTimeout(()=>toast.remove(),2000); }
+    updateCartBadge();
+
+    // Profile picture upload logic
+    document.getElementById('profileUpload')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if(file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          localStorage.setItem('profilePic', ev.target.result);
+          document.getElementById('profileAvatar').src = ev.target.result;
+          showToast("Profile picture updated! 🎉", "#2c5f2d");
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    const savedPic = localStorage.getItem('profilePic');
+    if(savedPic) document.getElementById('profileAvatar').src = savedPic;
+
+    // Dark/Light mode with local storage and proper toggle
+    function initTheme() { if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark'); else document.body.classList.remove('dark'); }
+    document.getElementById('themeToggle').onclick=()=>{ document.body.classList.toggle('dark'); localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light'); };
+    initTheme();
+
+    // Navigation SPA
+    function navigate(page) { window.history.pushState({}, '', '#'+page); renderPage(page); }
+    function renderPage(page) {
+      if(page==='home') renderHome();
+      else if(page==='about') renderAbout();
+      else if(page==='products') renderProducts();
+      else if(page==='business-plan') renderBusinessPlan();
+      else if(page==='gallery') renderGallery();
+      else if(page==='contact') renderContact();
+      else if(page==='admin') renderAdminDashboard();
+      else if(page==='cart') renderCart();
+      else if(page==='membership') renderMembership();
+      else renderHome();
+      attachNavEvents();
+    }
+    function attachNavEvents() { document.querySelectorAll('.nav-link').forEach(link=>{ link.addEventListener('click',(e)=>{ e.preventDefault(); navigate(link.dataset.page); }); }); }
+    window.addEventListener('popstate', ()=>renderPage(window.location.hash.slice(1)||'home'));
+    
+    // ========== HOMEPAGE with colorful pictures on top right ==========
+    function renderHome() {
+      document.getElementById('app').innerHTML = `
+        <div class="hero-gradient text-white relative overflow-hidden">
+          <div class="max-w-7xl mx-auto px-6 py-20 md:py-28">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+              <div class="md:w-1/2 text-center md:text-left" data-aos="fade-right">
+                <h1 class="text-5xl md:text-7xl font-black drop-shadow-lg">Cloud & Brew</h1>
+                <p class="text-2xl md:text-3xl mt-3 italic font-light">"Relax, Sip, and Vape in One Place."</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-8">
+                  <button onclick="navigate('products')" class="px-7 py-3 bg-white text-amber-800 font-bold rounded-full shadow-xl hover:scale-105 transition flex items-center gap-2"><i class="fas fa-store"></i> Shop Now</button>
+                  <button onclick="navigate('products')" class="px-7 py-3 bg-amber-600 text-white font-bold rounded-full shadow-xl hover:bg-amber-500 flex items-center gap-2"><i class="fas fa-mug-hot"></i> Order Coffee</button>
+                  <button onclick="navigate('contact')" class="px-7 py-3 border-2 border-white font-bold rounded-full hover:bg-white hover:text-amber-800 transition flex items-center gap-2"><i class="fas fa-headset"></i> Contact Us</button>
+                </div>
+              </div>
+              <!-- Top Right: High Quality Coffee & Vape Images Gallery -->
+              <div class="md:w-1/2 grid grid-cols-2 gap-3" data-aos="fade-left">
+                <img src="https://picsum.photos/id/225/300/200" class="rounded-2xl shadow-2xl border-4 border-amber-300 w-full h-32 object-cover hover:scale-105 transition">
+                <img src="https://picsum.photos/id/21/300/200" class="rounded-2xl shadow-2xl border-4 border-amber-300 w-full h-32 object-cover hover:scale-105 transition">
+                <img src="https://picsum.photos/id/146/300/200" class="rounded-2xl shadow-2xl border-4 border-amber-300 w-full h-32 object-cover hover:scale-105 transition">
+                <img src="https://picsum.photos/id/26/300/200" class="rounded-2xl shadow-2xl border-4 border-amber-300 w-full h-32 object-cover hover:scale-105 transition">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-6 py-16 text-center" data-aos="fade-up">
+          <div class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm p-8 rounded-3xl shadow-lg">
+            <h2 class="text-4xl font-bold bg-gradient-to-r from-amber-700 to-amber-500 bg-clip-text text-transparent">A Unique Fusion Experience</h2>
+            <p class="text-gray-700 dark:text-gray-200 mt-4 text-lg max-w-2xl mx-auto">At Cloud & Brew, premium specialty coffee meets modern vape culture. Enjoy artisanal espresso while exploring the finest vape hardware and e-liquids. Your new favorite hangout.</p>
+            <div class="flex justify-center gap-6 mt-8 text-amber-700 dark:text-amber-400 text-5xl"><i class="fas fa-mug-hot"></i><i class="fas fa-plus"></i><i class="fas fa-cloud-upload-alt"></i></div>
+          </div>
+        </div>
+      `;
+      AOSRefresh();
+    }
+
+    // About page (colorful)
+    function renderAbout() {
+      document.getElementById('app').innerHTML = `<div class="max-w-6xl mx-auto px-6 py-12" data-aos="fade-up"><div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8"><h2 class="text-4xl font-bold text-center text-amber-700">About Us</h2><div class="grid md:grid-cols-2 gap-10 mt-8"><div><h3 class="text-2xl font-semibold flex items-center gap-2"><i class="fas fa-seedling text-green-600"></i> Background</h3><p class="mt-2">Founded in 2023, Cloud & Brew redefines social relaxation. We bring together ethically sourced coffee beans from Colombia & Ethiopia, plus curated vape brands known for safety & innovation.</p><h3 class="text-2xl font-semibold mt-6 flex gap-2"><i class="fas fa-bullseye text-red-500"></i> Mission</h3><p>Delight every guest with exceptional coffee, cutting-edge vape selections, and a cozy environment.</p><h3 class="text-2xl font-semibold mt-6"><i class="fas fa-eye text-blue-500"></i> Vision</h3><p>Lead as the top hybrid lifestyle brand, blending café culture with vape retail.</p></div><div><h3 class="text-2xl font-semibold">Why Choose Us?</h3><ul class="list-disc list-inside space-y-2 mt-2"><li class="text-lg">✓ Premium arabica beans, fresh roasted weekly</li><li class="text-lg">✓ 100% authentic vape hardware & liquids</li><li class="text-lg">✓ Knowledgeable staff & baristas</li><li class="text-lg">✓ Lounge seating, free WiFi, work-friendly</li><li class="text-lg">✓ Membership perks with instant rewards</li></ul><img class="mt-6 rounded-xl shadow-lg" src="https://picsum.photos/id/15/500/280" alt="interior"></div></div></div></div>`;
+      AOSRefresh();
+    }
+
+    // Products with colorful cards
+    function renderProducts() {
+      let coffeeItems = products.filter(p=>p.category==='coffee'||p.category==='non-coffee'||p.category==='pastry');
+      let vapeItems = products.filter(p=>p.category==='vape');
+      function cardGrid(items) { return items.map(p=>`<div class="product-card bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-amber-100 dark:border-amber-800 flex flex-col"><img src="${p.img}" class="h-48 w-full object-cover"><div class="p-4"><h3 class="font-bold text-xl">${p.name}</h3><p class="text-gray-500 dark:text-gray-300 text-sm">${p.desc}</p><div class="flex justify-between items-center mt-4"><span class="text-amber-600 font-extrabold text-xl">$${p.price.toFixed(2)}</span><button onclick="addToCart('${p.id}')" class="bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition flex gap-2 items-center"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join(''); }
+      document.getElementById('app').innerHTML = `<div class="max-w-7xl mx-auto px-6 py-10"><h2 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-amber-800 to-amber-500">Our Menu & Vape Collection</h2><div class="mt-12"><h3 class="text-2xl font-bold border-l-8 border-amber-500 pl-4 mb-5">☕ Coffee & Snacks</h3><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">${cardGrid(coffeeItems)}</div></div><div class="mt-16"><h3 class="text-2xl font-bold border-l-8 border-emerald-500 pl-4 mb-5">💨 Vape Shop</h3><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">${cardGrid(vapeItems)}</div></div></div>`;
+      AOSRefresh();
+    }
+    function renderBusinessPlan() { document.getElementById('app').innerHTML = `<div class="max-w-5xl mx-auto px-6 py-12 space-y-6 bg-white/50 dark:bg-gray-800/50 rounded-3xl m-6"><h2 class="text-3xl font-bold text-amber-700">Business Plan</h2><div class="grid md:grid-cols-2 gap-6"><div class="p-4 bg-amber-50 dark:bg-gray-700 rounded-2xl"><h3 class="font-bold">Executive Summary</h3><p>Cloud & Brew is a unique lifestyle destination combining premium coffee with modern vape retail, targeting young professionals and hobbyists.</p></div><div class="p-4 bg-amber-50 dark:bg-gray-700 rounded-2xl"><h3 class="font-bold">Revenue Streams</h3><p>Coffee, vape devices, e-liquids, accessories, online orders, membership programs.</p></div><div class="p-4 bg-amber-50 dark:bg-gray-700 rounded-2xl"><h3 class="font-bold">SWOT</h3><p>Strengths: Unique concept, dual revenue. Weakness: regulations. Opportunities: growing coffee culture, online sales expansion. Threats: competition.</p></div><div class="p-4 bg-amber-50 dark:bg-gray-700 rounded-2xl"><h3 class="font-bold">Marketing Strategy</h3><p>Social media, loyalty program, local events, influencer partnerships.</p></div></div></div>`; AOSRefresh(); }
+    function renderGallery() { document.getElementById('app').innerHTML = `<div class="max-w-7xl mx-auto px-6 py-12"><h2 class="text-4xl font-bold text-center text-amber-700">📸 Gallery</h2><div class="grid grid-cols-2 md:grid-cols-4 gap-5 mt-8">${[1,2,3,4,5,6,7,8].map(i=>`<div class="rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition"><img src="https://picsum.photos/id/${i+40}/400/300" class="w-full h-56 object-cover"></div>`).join('')}</div></div>`; AOSRefresh(); }
+    function renderContact() { document.getElementById('app').innerHTML = `<div class="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-12"><div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow"><h2 class="text-3xl font-bold">📞 Contact Us</h2><form id="contactForm" class="mt-6 space-y-4"><input type="text" placeholder="Your Name" class="w-full p-3 border rounded-xl" required><input type="email" placeholder="Email" class="w-full p-3 border rounded-xl" required><textarea rows="3" placeholder="Message" class="w-full p-3 border rounded-xl"></textarea><button type="submit" class="bg-amber-600 text-white px-6 py-2 rounded-full w-full font-bold">Send Message <i class="fas fa-paper-plane"></i></button></form><div class="mt-6"><p><i class="fas fa-phone text-amber-600"></i> +1 (555) 234-5689</p><p><i class="fas fa-envelope text-amber-600"></i> hello@cloudandbrew.com</p><p><i class="far fa-clock"></i> Mon-Fri 8am-9pm, Sat-Sun 9am-10pm</p></div></div><div><iframe class="w-full h-80 rounded-2xl shadow-xl" src="https://maps.google.com/maps?q=Central%20Park%2C%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div></div><script>document.getElementById('contactForm')?.addEventListener('submit',(e)=>{e.preventDefault();alert('✨ Message sent! We will get back soon.');});<\/script>`; AOSRefresh(); }
+    function renderMembership() { 
+      document.getElementById('app').innerHTML = `<div class="max-w-lg mx-auto bg-gradient-to-br from-amber-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-2xl p-8 my-12"><h2 class="text-3xl font-bold text-center text-amber-700">✨ Loyalty Rewards</h2>${currentUser?`<p class="text-center mt-4">Welcome back <span class="font-bold">${currentUser.name}</span>! 🎉 You have <span class="text-amber-600 text-2xl font-black">${currentUser.points}</span> points.</p><div class="mt-6 bg-amber-100 p-4 rounded-2xl">Earn 10 points per $1 spent. Redeem 500 points for $5 off.</div><button id="logoutMem" class="mt-4 bg-gray-500 text-white p-2 rounded-full w-full">Logout</button>`:`<form id="loginReg"><input id="memEmail" placeholder="Email" class="w-full p-3 border rounded-xl my-2"><input id="memName" placeholder="Full Name (for register)"><input id="memPwd" type="password" placeholder="Password"><button id="loginBtn" type="button" class="bg-amber-600 w-full mt-3 p-3 rounded-xl text-white font-bold">Login / Register</button></form><p class="text-sm mt-3">Register to get 100 bonus points + birthday reward!</p>`}<div id="loyaltyMsg"></div></div>`;
+      if(document.getElementById('loginBtn')) document.getElementById('loginBtn').onclick = () => { let email=document.getElementById('memEmail').value, name=document.getElementById('memName').value, pwd=document.getElementById('memPwd').value; if(email){ let existing = users.find(u=>u.email===email); if(existing){ if(existing.password===pwd) { currentUser=existing; localStorage.setItem('cloudbrew_user',JSON.stringify(currentUser)); alert(`Welcome back ${existing.name}`); renderMembership(); } else alert("wrong password"); } else { let newUser={id:Date.now(), email, name:name||"Member",points:100,password:pwd}; users.push(newUser); currentUser=newUser; localStorage.setItem('cloudbrew_user',JSON.stringify(currentUser)); localStorage.setItem('cloudbrew_users',JSON.stringify(users)); alert("Registered! +100 points"); renderMembership(); } } };
+      if(document.getElementById('logoutMem')) document.getElementById('logoutMem').onclick=()=>{ currentUser=null; localStorage.removeItem('cloudbrew_user'); renderMembership(); };
+    }
+    function renderCart() { if(cart.length===0){ document.getElementById('app').innerHTML=`<div class="text-center py-32"><i class="fas fa-shopping-cart text-7xl text-gray-400"></i><p class="mt-4">Your cart feels light, grab a coffee or vape!</p></div>`; return; } let total = cart.reduce((s,i)=>s+(i.price*i.qty),0); document.getElementById('app').innerHTML = `<div class="max-w-4xl mx-auto px-6 py-10"><div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6"><h2 class="text-3xl font-bold">🛒 Your Order</h2><div class="mt-6 space-y-4">${cart.map(i=>`<div class="flex justify-between items-center border-b pb-3"><div><p class="font-bold">${i.name}</p><p>$${i.price} x ${i.qty}</p></div><div><button onclick="updateCartItem('${i.id}', -1)" class="bg-gray-300 dark:bg-gray-600 px-3 py-1 rounded-full">-</button><span class="mx-3">${i.qty}</span><button onclick="updateCartItem('${i.id}', 1)" class="bg-gray-300 dark:bg-gray-600 px-3 py-1 rounded-full">+</button><button onclick="removeCartItem('${i.id}')" class="ml-4 text-red-500"><i class="fas fa-trash"></i></button></div></div>`).join('')}<div class="text-right text-2xl font-extrabold mt-6">Total: $${total.toFixed(2)}</div><button id="checkoutBtn" class="bg-green-600 w-full py-3 rounded-xl text-white font-bold mt-4 shadow-lg"><i class="fas fa-lock"></i> Secure Checkout</button></div></div></div>`;
+      window.updateCartItem = (id,delta)=>{ let item=cart.find(i=>i.id===id); if(item){ item.qty+=delta; if(item.qty<=0) cart=cart.filter(i=>i.id!==id); saveCart(); renderCart(); } };
+      window.removeCartItem = (id)=>{ cart=cart.filter(i=>i.id!==id); saveCart(); renderCart(); };
+      document.getElementById('checkoutBtn').onclick=()=>{ if(cart.length){ let order={id:'ORD'+Date.now(), items:[...cart], total:cart.reduce((s,i)=>s+(i.price*i.qty),0), date:new Date(), status:'confirmed'}; orders.push(order); localStorage.setItem('cloudbrew_orders',JSON.stringify(orders)); if(currentUser){ currentUser.points += Math.floor(order.total*10); localStorage.setItem('cloudbrew_user',JSON.stringify(currentUser)); let uidx=users.findIndex(u=>u.id===currentUser.id); if(uidx>-1) users[uidx].points=currentUser.points; localStorage.setItem('cloudbrew_users',JSON.stringify(users)); } cart=[]; saveCart(); alert(`✅ Order placed! ${order.id}. Points added.`); renderCart(); } };
+    }
+    function renderAdminDashboard() { document.getElementById('app').innerHTML = `<div class="max-w-7xl mx-auto px-6 py-8"><h2 class="text-3xl font-bold text-amber-700">Admin Dashboard</h2><div class="grid md:grid-cols-4 gap-6 mt-6"><div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"><h3>📊 Sales Reports</h3><p>Revenue: $${salesReports.totalSales}</p><p>Orders: ${salesReports.ordersCount}</p></div><div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"><h3>📦 Orders</h3><p>Total: ${orders.length}</p><button id="viewOrdersBtn" class="text-amber-600">View Orders</button></div><div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"><h3>👥 Customers</h3><p>Registered: ${users.length}</p></div><div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"><h3>📦 Inventory</h3><p>Products: ${products.length}</p></div></div><div id="adminDetailPanel" class="mt-8"></div></div>`;
+      document.getElementById('viewOrdersBtn')?.addEventListener('click',()=>{ document.getElementById('adminDetailPanel').innerHTML=`<pre class="bg-gray-100 p-4 rounded">${JSON.stringify(orders,null,2)}</pre>`; });
+    }
+    function AOSRefresh() { if(typeof AOS !== 'undefined') AOS.refresh(); }
+
+    // ---------- WORKING LIVE CHAT BOX (fully functional) ----------
+    function initLiveChat() {
+      const chatContainer = document.createElement('div');
+      chatContainer.className = 'fixed bottom-6 right-6 z-50 flex flex-col items-end';
+      chatContainer.innerHTML = `
+        <div id="liveChatWindow" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-80 mb-3 overflow-hidden hidden transition-all border border-amber-200 dark:border-amber-700">
+          <div class="bg-gradient-to-r from-amber-600 to-amber-500 text-white p-3 font-bold flex justify-between"><span><i class="fas fa-comment-dots"></i> Live Support</span><button id="closeChatBtn"><i class="fas fa-times"></i></button></div>
+          <div id="chatMessages" class="h-64 overflow-y-auto p-3 space-y-2 bg-amber-50 dark:bg-gray-700"></div>
+          <div class="p-2 flex gap-2 border-t"><input id="chatInput" placeholder="Type a message..." class="flex-1 p-2 rounded-xl border"><button id="sendChatMsgBtn" class="bg-amber-600 text-white px-3 rounded-full"><i class="fas fa-paper-plane"></i></button></div>
+        </div>
+        <button id="openChatBtn" class="bg-amber-600 text-white p-4 rounded-full shadow-xl hover:bg-amber-500 transition text-xl"><i class="fas fa-comment"></i></button>
+      `;
+      document.body.appendChild(chatContainer);
+      const chatWindow = document.getElementById('liveChatWindow');
+      const openBtn = document.getElementById('openChatBtn');
+      const closeBtn = document.getElementById('closeChatBtn');
+      const sendBtn = document.getElementById('sendChatMsgBtn');
+      const chatInput = document.getElementById('chatInput');
+      const messagesDiv = document.getElementById('chatMessages');
+      function addMessage(text, isUser) { const div = document.createElement('div'); div.className = `p-2 rounded-xl max-w-[85%] ${isUser ? 'bg-amber-600 text-white self-end ml-auto' : 'bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white'} text-sm`; div.innerText = text; messagesDiv.appendChild(div); messagesDiv.scrollTop = messagesDiv.scrollHeight; }
+      addMessage("Hi! 👋 Welcome to Cloud & Brew. Need help with coffee or vape products?", false);
+      openBtn.onclick = () => { chatWindow.classList.remove('hidden'); openBtn.classList.add('hidden'); };
+      closeBtn.onclick = () => { chatWindow.classList.add('hidden'); openBtn.classList.remove('hidden'); };
+      sendBtn.onclick = () => { let msg = chatInput.value.trim(); if(msg){ addMessage(msg, true); setTimeout(()=> addMessage("Thanks! Our team will assist you shortly. Meanwhile, check our rewards ✨", false), 600); chatInput.value = ''; } };
+      chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendBtn.click(); });
+    }
+    initLiveChat();
+    
+    // Search & newsletter integration
+    const searchDiv = document.createElement('div');
+    searchDiv.className = "fixed bottom-24 right-6 bg-white dark:bg-gray-800 rounded-full shadow-lg px-4 py-2 flex items-center gap-2 z-40 border border-amber-300";
+    searchDiv.innerHTML = `<i class="fas fa-search text-amber-600"></i><input id="globalSearchInput" placeholder="Search coffee or vape..." class="outline-none bg-transparent w-36 text-sm"><button id="searchBtn" class="text-amber-600">Go</button>`;
+    document.body.appendChild(searchDiv);
+    document.getElementById('searchBtn').onclick = () => { let term = document.getElementById('globalSearchInput').value.toLowerCase(); let found = products.filter(p=>p.name.toLowerCase().includes(term)); if(found.length) alert(`Found: ${found.map(p=>p.name).join(", ")}`); else alert("No products found."); };
+    const newsBtn = document.createElement('div'); newsBtn.className = "fixed bottom-6 left-6 bg-green-600 text-white p-3 rounded-full shadow-xl cursor-pointer z-40"; newsBtn.innerHTML = "<i class='fas fa-envelope-open-text'></i>"; newsBtn.onclick = () => { let email = prompt("Subscribe to our newsletter for 10% off!"); if(email) alert(`✅ ${email} subscribed! Check your inbox.`); }; document.body.appendChild(newsBtn);
+    
+    // Initial render
+    renderPage(window.location.hash.slice(1)||'home');
+    window.addToCart = addToCart;
+    window.navigate = navigate;
+  </script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init({duration: 800, once: true});</script>
+</body>
+</html>
